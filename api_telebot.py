@@ -17,6 +17,17 @@ nubmbe_avto=''
 sms=''
 number=''
 user_id=''
+def answer1(for_id,message, from_user):
+    def step1():
+        bot.send_message(for_id, 'Напишите ответ')
+        print('pipka')
+        bot.register_next_step_handler(message, step2)
+
+    def step2(message):
+        print(message.text)
+        bot.send_message(from_user, message.text)
+
+    step1()
 @bot.message_handler(commands=['start'])
 def button_message(message):
     otvet = types.ReplyKeyboardMarkup(row_width=2)
@@ -124,12 +135,21 @@ def callback_inline(call):
        print('hi,hi')
        print(sms, call.message.chat.id)
        print(call.message)
-@bot.callback_query_handler(func=lambda call: True)
-def callback_inline2(call):
-    print(call.data)
-    if call.data == 'anwer':
 
-        print('hello_world')
+       for x in answer.find({'sms':sms}):
+           from_user=(x['from_user'])
+           for_user=x['user_id']
+           print(x)
+           answer1(for_user, call.message, from_user=from_user)
+
+
+
+
+
+
+
+
+
 
 
 

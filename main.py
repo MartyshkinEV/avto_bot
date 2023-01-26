@@ -7,6 +7,8 @@ def get_zapros(token,method, params):
 
     # print(req.json())
     return req.json()
+
+print(get_zapros(token, 'messages.search',{'q':'start'}))
 def sendMessag(token,  params):
     '''' Отпраляем сообщение пользователю'''
     # params = {'chat_id': '2036285926', 'text': 'hi,men'}
@@ -18,6 +20,9 @@ def  getUpdates(token):
     ask=get_zapros(token, 'getUpdates','')
 
     return ask['result']
+
+
+
 def registrations():
     for x in (getUpdates(token)):
         text = (x['message']['text'])
@@ -37,4 +42,3 @@ RKM='''ReplyKeyboardMarkup(
 )'''
 params = {'chat_id': '2036285926', 'text': 'hi,men', 'reply_markup':RKM}
 
-sendMessag(token,params)

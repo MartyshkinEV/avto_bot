@@ -5,7 +5,8 @@ from mongo_db import collecsion_conn
 conn=collecsion_conn('avto', 'gosnomer')
 answer = collecsion_conn('avto','answer')
 print(conn)
-
+for x in conn.find():
+    print(x)
 import telebot
 from telebot import types
 
@@ -30,22 +31,21 @@ def answer1(for_id,message, from_user):
     step1()
 @bot.message_handler(commands=['start'])
 def button_message(message):
-    otvet = types.ReplyKeyboardMarkup(row_width=2)
+    otvet = types.ReplyKeyboardMarkup(row_width=1)
 
     button1 = types.KeyboardButton(" Регистрация")
     button2 = types.KeyboardButton(" Написать владельцу авто")
-    button3 = types.KeyboardButton(" Ответить на сообщение")
 
-    otvet.add(button1, button2, button3)
+    otvet.add(button1, button2 )
     bot.send_message(message.chat.id,'Выбери действие', reply_markup=otvet)
 @bot.message_handler(content_types=['text'])
 def catalogchk(message):
 
     if message.text=='Написать владельцу авто':
-        bot.send_message(message.from_user.id, 'Введите номер авто, чтобы отправить ему сообщение')
+        bot.send_message(message.from_user.id, 'Введите номер авто, чтобы отправить ему сообщение (русскими буквами)')
         bot.register_next_step_handler(message, send_message_avto)
     elif   message.text=='Регистрация':
-        bot.send_message(message.from_user.id, 'Введите номер Вашего авто')
+        bot.send_message(message.from_user.id, 'Введите номер Вашего авто (буквы должны быть русскими)')
         bot.register_next_step_handler(message, conf_registr)
 
 
@@ -100,6 +100,7 @@ def confirmation(message):# подтверждение
     sms = message.text
 
     confirm =types.InlineKeyboardMarkup(row_width=2)
+
     but1=types.InlineKeyboardButton(" Yes", callback_data='yes')
     confirm.add(but1)
     bot.send_message(message.from_user.id, f' Отправляю сообщение для пользователя {nubmbe_avto} {sms}', reply_markup=confirm)
@@ -131,35 +132,20 @@ def callback_inline(call):
        print(repr(e))
 
 
-   if call.data=='answer':
-       print('hi,hi')
-       print(sms, call.message.chat.id)
-       print(call.message)
+   try:
+       if call.data == 'answer':
+           print('hi,hi')
+           print(sms, call.message.chat.id)
+           print(call.message)
 
-       for x in answer.find({'sms':sms}):
-           from_user=(x['from_user'])
-           for_user=x['user_id']
-           print(x)
-           answer1(for_user, call.message, from_user=from_user)
+           for x in answer.find({'sms': sms}):
+               from_user = (x['from_user'])
+               for_user = x['user_id']
+               print(x)
+               answer1(for_user, call.message, from_user=from_user)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   except:
+       pass
 
 
 

@@ -6,7 +6,7 @@ def conn_mongo(name_bd):
     from pymongo import MongoClient
 
     client = MongoClient()
-    client = MongoClient('45.137.190.88', 27017)
+    client = MongoClient('localhost', 27017)
     db = client[name_bd]
     return (db)
 

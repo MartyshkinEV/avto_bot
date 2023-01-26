@@ -37,6 +37,7 @@ def catalogchk(message):
         bot.send_message(message.from_user.id, 'Введите номер Вашего авто')
         bot.register_next_step_handler(message, conf_registr)
 
+
 def conf_registr(message):
     global number
     number= message.text
@@ -100,7 +101,12 @@ def callback_inline(call):
        if call.data == "yes":
            bot.send_message(call.message.chat.id, "Сообщение отправлено пользователю")
            print('user_id', user_id)
-           bot.send_message(user_id,f'Вам отправлено сообщение {sms}')
+           answ = types.InlineKeyboardMarkup(row_width=2)
+           but1 = types.InlineKeyboardButton("Ответить на сообщение", callback_data='answer')
+           answ.add(but1)
+           bot.send_message(user_id,f'Вам отправлено сообщение {sms}', reply_markup=answ)
+
+
            answer.insert_one({'from_user':call.message.chat.id, 'user_id':user_id, 'sms':sms})
 
        elif call.data == 'registr':
@@ -110,19 +116,23 @@ def callback_inline(call):
            for x in (conn.find()):
                print(x)
 
-
-
-
-
-       elif call.data == "bad":
-           bot.send_message(call.message.chat.id, " Для поиска Введи номер авто заглавными русскими буквами")
-
-
-
-
-
    except Exception as e:
        print(repr(e))
+
+
+   if call.data=='answer':
+       print('hi,hi')
+       print(sms, call.message.chat.id)
+       print(call.message)
+@bot.callback_query_handler(func=lambda call: True)
+def callback_inline2(call):
+    print(call.data)
+    if call.data == 'anwer':
+
+        print('hello_world')
+
+
+
 
 
 
